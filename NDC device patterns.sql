@@ -229,30 +229,39 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
-WHERE concept_name ~* 'SURG|UROLOG|EDUC|GLOVE' AND concept_name !~* ('(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone).*)(glycerin|glycerol)(?!.*(titan|Octinoxate|octocrylene|homosalate|' ||
+WHERE concept_name ~* 'SURG|UROLOG|EDUC|GLOVE|blistex' AND concept_name !~* ('(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone).*)(glycerin|glycerol)(?!.*(titan|Octinoxate|octocrylene|homosalate|' ||
                                                    'octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone))|hypericum|alcohol \.7|reducer|BETASEPT|Chloroxylenol|Triclosan|aluminum zirconium|toxoid|POVIDONE|Lansoprazole|dexamethasone|' ||
-                                                   'Famotidine|ranitidine|aluminium zirconium|Cimetidine')
+                                                   'Famotidine|ranitidine|aluminium zirconium|Cimetidine|phenol|benzokaine')
 ;
 
 --Code for DRUGS
 INSERT INTO NDC_drugs
 SELECT *
 FROM NDC_remains
-WHERE concept_name ~* 'SURG|UROLOG|EDUC|GLOVE' AND concept_name ~* ('(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone).*)(glycerin|glycerol)(?!.*(titan|Octinoxate|octocrylene|homosalate|' ||
+WHERE concept_name ~* 'SURG|UROLOG|EDUC|GLOVE|blistex' AND concept_name ~* ('(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone).*)(glycerin|glycerol)(?!.*(titan|Octinoxate|octocrylene|homosalate|' ||
                                                    'octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone))|hypericum|alcohol \.7|reducer|BETASEPT|Chloroxylenol|Triclosan|aluminum zirconium|toxoid|POVIDONE|Lansoprazole|dexamethasone|' ||
-                                                   'Famotidine|ranitidine|aluminium zirconium|Cimetidine')
+                                                   'Famotidine|ranitidine|aluminium zirconium|Cimetidine|phenol|benzokaine')
 ;
 
 DELETE FROM NDC_remains
 WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_id from NDC_non_drugs)
 ;
 
+
+--11(0)
+INSERT INTO NDC_drugs
+SELECT *
+FROM NDC_remains
+    where concept_name ~* 'leaf|venom|flower|root|detox'
+and concept_name !~*'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocrylene|homosalate';
+
+
 --11(1)
 --Code for DRUGS
 INSERT INTO NDC_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~* ('leaf|venom|seed|tinctoria|flower|root|pollen|flos|cartilago|suppositor|tincture|pellet|officinal|occidentalis|vegetabilis|homeopathic|' ||
+where concept_name ~* ('pollen|flos|cartilago|suppositor|tincture|pellet|officinal|occidentalis|vegetabilis|homeopathic|' ||
 
                        'aspidosperma|aconitum|adrenalinum|aesculus|allium|anemarrhena|anthracinum|apis mel|aralia|argentum|arnica|arsenic|' ||
                        'ascorbic acid|atropa|aurum|baptisia|belladonna|bellis|berber|bryonia|calcarea|calendula|cantharis|' ||
@@ -325,8 +334,8 @@ where concept_name ~* ('glyceryl stearate|Aluminum stearate|Amber|Arbutin|BEMOTR
       'dioxybenzone|drometrizole|drometrizole trisiloxane|ensulizole|enzacamene|hexyl salicylate|homosalate|' ||
       'meradimate|neral|octisalate|octocrylene|octyltriethoxysilane|olive oil|oxybenzone|padimate-O|' ||
       'resveratrol|stearate|sulisobenzone|titan')
-and concept_name !~* 'Triclosan|triclocarban|Triamcinolone|Testosterone|pyridoxine|Naproxen|Ipecac|Iodine|Immunoglobulin|Histidine|Histamine|Folic Acid|Escherichia coli|Epinephrine|Cortisone|Corticotropin|zeel|vitamin|tablet|plaster|FNG I|silent nights|' ||
-    'sleep |external analgesic|phenylephrine|detox'
+and concept_name !~* ('Triclosan|triclocarban|Triamcinolone|Testosterone|pyridoxine|Naproxen|Ipecac|Iodine|Immunoglobulin|Histidine|Histamine|Folic Acid|Escherichia coli|Epinephrine|Cortisone|Corticotropin|zeel|vitamin|tablet|plaster|FNG I|silent nights|' ||
+    'sleep |external analgesic|phenylephrine|detox')
 ;
 
 --Code for DRUGS
@@ -339,8 +348,8 @@ where concept_name ~* ('glyceryl stearate|Aluminum stearate|Amber|Arbutin|BEMOTR
       'dioxybenzone|drometrizole|drometrizole trisiloxane|ensulizole|enzacamene|hexyl salicylate|homosalate|' ||
       'meradimate|neral|octisalate|octocrylene|octyltriethoxysilane|olive oil|oxybenzone|padimate-O|' ||
       'resveratrol|stearate|sulisobenzone|titan')
-and concept_name ~* 'Triclosan|triclocarban|Triamcinolone|Testosterone|pyridoxine|Naproxen|Ipecac|Iodine|Immunoglobulin|Histidine|Histamine|Folic Acid|Escherichia coli|Epinephrine|Cortisone|Corticotropin|zeel|vitamin|tablet|plaster|FNG I|silent nights|' ||
-    'sleep |external analgesic|phenylephrine|detox'
+and concept_name ~* ('Triclosan|triclocarban|Triamcinolone|Testosterone|pyridoxine|Naproxen|Ipecac|Iodine|Immunoglobulin|Histidine|Histamine|Folic Acid|Escherichia coli|Epinephrine|Cortisone|Corticotropin|zeel|vitamin|tablet|plaster|FNG I|silent nights|' ||
+    'sleep |external analgesic|phenylephrine|detox')
 ;
 
 DELETE FROM NDC_remains
@@ -851,8 +860,8 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
-WHERE concept_name ~* 'set|BATTER|BUBBLEGUM|INTRODUCER|lanolin|petrolatum|tape|N95 RESPIRATOR|adenosine(?=.*(topical|cream))|wipe|cath|container|cntainr|thermo|sheath|auto(squeeze|drop)|sheet|camino|flavor liquid|remover|adhesive|dispens'
-and concept_name !~* 'treatment|treamtent|INFLUENZA|PENTAMIDINE|vitamin|alosetron|tapentadol|ertapenem|panthenol|tranexamic'
+WHERE concept_name ~* 'set|BATTER|BUBBLE(gum| gum)|INTRODUCER|lanolin|petrolatum|tape|N95 RESPIRATOR|adenosine(?=.*(topical|cream))|wipe|cath|container|cntainr|thermo|sheath|auto(squeeze|drop)|sheet|camino|flav(or|our)|remover|adhesive|dispens'
+and concept_name !~* 'treatment|treamtent|INFLUENZA|PENTAMIDINE|vitamin|alosetron|tapentadol|ertapenem|panthenol|tranexamic|antacid|bismuth|nicotine|chewable'
 ;
 
 --Code for DRUGS
@@ -892,6 +901,89 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 ;
 
 
+--37
+--Code for NON-DRUGS
+INSERT INTO NDC_non_drugs
+SELECT *
+FROM NDC_remains
+where concept_name ~* ('cream|creme')
+and concept_name !~* ('menthol|allantoin|vitamin|dioscorea|fluocinonide|Halobetasol|Halcinonide|Hydroquinone|LULICONAZOLE|pimecrolimus|pharmax|' ||
+                      'Progesterone|sulfadiazine|aluminum chlorohydrate|sulconazol|Terbinafin|terconazol|Testosterone|Tolnaftate|hormone|Tretinoin|' ||
+                      'Trolamine|typhonium|sulfanilamide|triclosan|dimthicon')
+;
+
+--Code for DRUGS
+INSERT INTO NDC_drugs
+SELECT *
+FROM NDC_remains
+where concept_name ~* ('cream|creme')
+and concept_name ~* ('allantoin|vitamin|dioscorea|fluocinonide|Halobetasol|Halcinonide|Hydroquinone|LULICONAZOLE|pimecrolimus|pharmax|' ||
+                      'Progesterone|sulfadiazine|aluminum chlorohydrate|sulconazol|Terbinafin|terconazol|Testosterone|Tolnaftate|hormone|Tretinoin|' ||
+                      'Trolamine|typhonium|sulfanilamide|triclosan|dimthicon')
+;
+
+DELETE FROM NDC_remains
+WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_id from NDC_non_drugs)
+;
+
+
+--38
+--Code for NON-DRUGS
+INSERT INTO NDC_non_drugs
+SELECT *
+FROM NDC_remains
+where concept_name ~* ('rinse|Monoject|COOLER')
+;
+
+
+DELETE FROM NDC_remains
+WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_id from NDC_non_drugs)
+;
+
+
+--39
+--Code for NON-DRUGS
+INSERT INTO NDC_non_drugs
+SELECT *
+FROM NDC_remains
+where concept_name ~* 'menthol'
+and concept_name !~* 'capsaicin|calamin'
+;
+
+--Code for DRUGS
+INSERT INTO NDC_drugs
+SELECT *
+FROM NDC_remains
+where concept_name ~* 'menthol'
+and concept_name ~* 'capsaicin|calamin'
+;
+
+DELETE FROM NDC_remains
+WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_id from NDC_non_drugs)
+;
+
+
+--40
+--Code for NON-DRUGS
+INSERT INTO NDC_non_drugs
+SELECT *
+FROM NDC_remains
+where concept_name ~*('F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)')
+and concept_name !~*'INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil'
+;
+
+--Code for DRUGS
+INSERT INTO NDC_drugs
+SELECT *
+FROM NDC_remains
+where concept_name ~*('F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)')
+and concept_name ~*'INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil'
+;
+
+DELETE FROM NDC_remains
+WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_id from NDC_non_drugs)
+;
+
 
 --------------------------------------------------
 
@@ -899,47 +991,18 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 
 select count (*) from NDC_remains;
 
---All devices, I think
-select * from NDC_remains
-where concept_name ~* ('rinse')
-order by concept_name;
-
---All devices, I think
-select * from NDC_remains
-where concept_name ~* ('cream|creme')
-and concept_name !~* ('menthol|allantoin|vitamin|dioscorea|fluocinonide|Halobetasol|Halcinonide|Hydroquinone|LULICONAZOLE|pimecrolimus|pharmax|' ||
-                      'Progesterone|sulfadiazine|aluminum chlorohydrate|sulconazol|Terbinafin|terconazol|Testosterone|Tolnaftate|hormone|Tretinoin|' ||
-                      'Trolamine|typhonium|sulfanilamide|triclosan|dimthicon')
-order by concept_name;
-
---All devices, I think
-select * from NDC_remains where concept_name ~* 'menthol'
-and concept_name !~* 'capsaicin' --calamin?
-order by concept_name;
-
-
-
---Проверить, как они сюда попали
+--Test for titan in drugs
 SELECT *
 FROM ndc_drugs
 WHERE concept_name ~* 'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocrylene|homosalate'
 ;
---большинство здесь и должны находиться, поскольку являются гомеопатией или попали сюда по драгам/витаминам
---Концепты, которые здесь все же не должны находиться связаны с попаданием по:
---japonica root oil (попадает в большой гомеопатической маске по root, таких концептов всего 16)
---flower (аналогично с japonica root, 10 концептов)
---venom (по venom 2 концепта)
---часть могла попасть по detox
 
-
+--Real test for titan in drugs
 SELECT *
 FROM ndc_drugs
 WHERE concept_name ~* 'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocrylene|homosalate'
-and concept_name !~* 'root|flower|venom|niacinamide|hp_|vitamin|homeo|pellet|Salicylic Acid|progesterone|hydroquinone'
+and concept_name !~* 'detox|niacinamide|hp_|vitamin|homeo|pellet|Salicylic Acid|progesterone|hydroquinone|caffeine|IDEBENONE'
 ;
-
-
-
 
 
 
