@@ -26,6 +26,10 @@ DROP TABLE IF EXISTS NDC_drugs;
 CREATE TABLE NDC_drugs as (SELECT * FROM NDC_source WHERE FALSE)
 ;
 
+--Excluding mapping done manually
+DELETE FROM NDC_remains
+WHERE concept_id in (SELECT concept_id FROM NDC_manual)
+;
 
 --0
 --Code for DRUGS
@@ -254,6 +258,10 @@ SELECT *
 FROM NDC_remains
     where concept_name ~* 'leaf|venom|flower|root|detox'
 and concept_name !~*'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocrylene|homosalate';
+
+DELETE FROM NDC_remains
+WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_id from NDC_non_drugs)
+;
 
 
 --11(1)
@@ -779,7 +787,7 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~* 'albumin|mouthwash|DRSS|tegaderm|diapers|isotope|technetium|tc 99'
+where concept_name ~* 'albumin|mouthwash|DRSS|tegaderm|diapers|isotope|technetium'
 and concept_name !~* 'phenol|albuminuriaforce|THERAPEUTIC|tositumomab'
 ;
 
@@ -787,7 +795,7 @@ and concept_name !~* 'phenol|albuminuriaforce|THERAPEUTIC|tositumomab'
 INSERT INTO NDC_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~* 'albumin|mouthwash|DRSS|tegaderm|diapers|isotope|technetium|tc 99'
+where concept_name ~* 'albumin|mouthwash|DRSS|tegaderm|diapers|isotope|technetium'
 and concept_name ~* 'phenol|albuminuriaforce|THERAPEUTIC|tositumomab'
 ;
 
@@ -906,7 +914,7 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~* ('cream|creme')
+where concept_name ~* 'cream|creme'
 and concept_name !~* ('menthol|allantoin|vitamin|dioscorea|fluocinonide|Halobetasol|Halcinonide|Hydroquinone|LULICONAZOLE|pimecrolimus|pharmax|' ||
                       'Progesterone|sulfadiazine|aluminum chlorohydrate|sulconazol|Terbinafin|terconazol|Testosterone|Tolnaftate|hormone|Tretinoin|' ||
                       'Trolamine|typhonium|sulfanilamide|triclosan|dimthicon')
@@ -916,7 +924,7 @@ and concept_name !~* ('menthol|allantoin|vitamin|dioscorea|fluocinonide|Halobeta
 INSERT INTO NDC_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~* ('cream|creme')
+where concept_name ~* 'cream|creme'
 and concept_name ~* ('allantoin|vitamin|dioscorea|fluocinonide|Halobetasol|Halcinonide|Hydroquinone|LULICONAZOLE|pimecrolimus|pharmax|' ||
                       'Progesterone|sulfadiazine|aluminum chlorohydrate|sulconazol|Terbinafin|terconazol|Testosterone|Tolnaftate|hormone|Tretinoin|' ||
                       'Trolamine|typhonium|sulfanilamide|triclosan|dimthicon')
@@ -932,7 +940,7 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~* ('rinse|Monoject|COOLER')
+where concept_name ~* 'rinse|Monoject|COOLER'
 ;
 
 
@@ -968,16 +976,16 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~*('F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)')
-and concept_name !~*'INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil'
+where concept_name ~* 'F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)'
+and concept_name !~* 'INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil'
 ;
 
 --Code for DRUGS
 INSERT INTO NDC_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~*('F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)')
-and concept_name ~*'INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil'
+    where concept_name ~* 'F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)'
+and concept_name ~* 'INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil'
 ;
 
 DELETE FROM NDC_remains
@@ -1047,7 +1055,7 @@ EXCEPT
 
 SELECT *
 FROM NDC_remains
-WHERE concept_name ~* 'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocrylene|homosalate'
+where concept_name ~* 'Albumin Human,'
 
 ORDER BY concept_name
 ;
@@ -1055,13 +1063,15 @@ ORDER BY concept_name
 --Check in non_drugs
 SELECT *
 FROM ndc_non_drugs
-WHERE concept_name ~* 'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocrylene|homosalate'
+where concept_name ~* 'F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)'
+
 ;
 
 --Check in drugs
 SELECT *
 FROM ndc_drugs
-WHERE concept_name ~* 'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocrylene|homosalate'
+where concept_name ~* 'F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)'
+
 ;
 
 --Check in Source
