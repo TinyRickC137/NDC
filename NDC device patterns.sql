@@ -2,7 +2,6 @@
 --https://naturallysavvy.com/care/beware-your-antiperspirant-is-a-drug/
 --https://www.fda.gov/Drugs/ResourcesForYou/Consumers/BuyingUsingMedicineSafely/UnderstandingOver-the-CounterMedicines/ucm239463.htm
 
-
 DROP TABLE IF EXISTS NDC_source;
 CREATE TABLE NDC_source as (
 select * from devv5.concept
@@ -28,7 +27,7 @@ CREATE TABLE NDC_drugs as (SELECT * FROM NDC_source WHERE FALSE)
 
 --Excluding mapping done manually
 DELETE FROM NDC_remains
-WHERE concept_id in (SELECT concept_id FROM NDC_manual)
+WHERE concept_id in (SELECT concept_id FROM dalex.NDC_manual)
 ;
 
 --0
@@ -49,7 +48,7 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
-WHERE concept_name ~* 'sun|spf' and concept_name !~* 'sunmark(?!( witch hazel| BENZOIN COMPOUND TINCTURE))|childrens first aid|^first aid|(?<!SPF30 SUNSCREEN AND anti)bacterial|baceterial|hp_|foot care|tattoo care|tablet'
+WHERE concept_name ~* 'sun|spf|jart' and concept_name !~* 'sunmark(?!( witch hazel| BENZOIN COMPOUND TINCTURE))|childrens first aid|^first aid|(?<!SPF30 SUNSCREEN AND anti)bacterial|baceterial|hp_|foot care|tattoo care|tablet'
 ;
 
 --Code for DRUGS
@@ -100,9 +99,8 @@ INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
 WHERE concept_name ~* 'SELF|TRAIN|DAIL|DRESS|BANDAGE|MGMT|PANTS|CATHETER' and concept_name !~* ('SELF PITY|homeo|ALUMINUM CHLOROHYDRATE|aluminum zirconium|formula|DAILY-VITE|Miconazole|HOMEOPATHIC|H-BALM|haemophilus influenzae|BACILLUS CALMETTE-GUERIN|' ||
-                                                                              'Benzethonium|FLUORIDE|VACCINE|VITAMIN|VIT-|MULTIVIT|(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone).*)' ||
-                                                                              '(benzoyl peroxide|glycerin|glycerol)(?!.*(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone))|arsenicum alb' ||
-                                                                              '(?!.*C Daily Moisturizer)')
+                                                                              'Benzethonium|FLUORIDE|VACCINE|VITAMIN(?!.* c daily moist)|VIT-|MULTIVIT|(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone).*)' ||
+                                                                              '(benzoyl peroxide|glycerin|glycerol)(?!.*(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone))|arsenicum alb')
 ;
 
 --Code for DRUGS
@@ -110,9 +108,8 @@ INSERT INTO NDC_drugs
 SELECT *
 FROM NDC_remains
 WHERE concept_name ~* 'SELF|TRAIN|DAIL|DRESS|BANDAGE|MGMT|PANTS|CATHETER' and concept_name ~* ('SELF PITY|homeo|ALUMINUM CHLOROHYDRATE|aluminum zirconium|formula|DAILY-VITE|Miconazole|HOMEOPATHIC|H-BALM|haemophilus influenzae|BACILLUS CALMETTE-GUERIN|' ||
-                                                                              'Benzethonium|FLUORIDE|VACCINE|VITAMIN|VIT-|MULTIVIT|(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone).*)' ||
-                                                                              '(benzoyl peroxide|glycerin|glycerol)(?!.*(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone))|arsenicum alb' ||
-                                                                              '(?!.*C Daily Moisturizer)')
+                                                                              'Benzethonium|FLUORIDE|VACCINE|VITAMIN(?!.* c daily moist)|VIT-|MULTIVIT|(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone).*)' ||
+                                                                              '(benzoyl peroxide|glycerin|glycerol)(?!.*(titan|Octinoxate|octocrylene|homosalate|octisalate|niacinamide|adenosine|avobenzone|ensulizole|oxybenzone))|arsenicum alb')
 ;
 
 DELETE FROM NDC_remains
@@ -269,7 +266,7 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 INSERT INTO NDC_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~* ('pollen|flos|cartilago|suppositor|tincture|pellet|officinal|occidentalis|vegetabilis|homeopathic|' ||
+where concept_name ~* ('seed|pollen|flos|cartilago|suppositor|tincture|pellet|officinal|occidentalis|vegetabilis|homeopathic|' ||
 
                        'aspidosperma|aconitum|adrenalinum|aesculus|allium|anemarrhena|anthracinum|apis mel|aralia|argentum|arnica|arsenic|' ||
                        'ascorbic acid|atropa|aurum|baptisia|belladonna|bellis|berber|bryonia|calcarea|calendula|cantharis|' ||
@@ -278,6 +275,7 @@ where concept_name ~* ('pollen|flos|cartilago|suppositor|tincture|pellet|officin
                        'hypericum|ignatia|ipecac|iris versicolor|kreosotum|lachesis|ledum|lycopodium|mezereum|millefolium|myrrha|' ||
                        'nasturtium|phytolacca|plantago|pulsatilla|pyrogenium|riboflavin|thyroidinum|tocopherol|trifolium pratense|vomica|QUEBRACHO|' ||
                        'ruta graveolens|dulcamara')
+and concept_name !~* 'scrub|rosehip|peeling'
 ;
 
 DELETE FROM NDC_remains
@@ -288,7 +286,8 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 --Code for DRUGS
 INSERT INTO NDC_drugs
 select * from NDC_remains
-   where concept_name ~* ('niacinamide|Alclometasone|5-Hydroxytryptophan|6-Aminocaproic Acid|Acebutolol|Acetazolamide|Acetylcarnitine|Acetylcysteine|Activated Charcoal|Acyclovir|' ||
+   where concept_name ~* ('(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|avobenzone|ensulizole|oxybenzone).*)(niacinamide)(?!.*(titan|Octinoxate|octocrylene|homosalate|octisalate|avobenzone|ensulizole|oxybenzone))|' ||
+                          'Alclometasone|5-Hydroxytryptophan|6-Aminocaproic Acid|Acebutolol|Acetazolamide|Acetylcarnitine|Acetylcysteine|Activated Charcoal|Acyclovir|' ||
                          'adalimumab|Albendazole|Albumin Human, USP|Alendronate|alfuzosin|Allopurinol|alogliptin|Alprazolam|Alprostadil|Amantadine|Amikacin|Amiloride|Aminophylline|Amiodarone|Amitriptyline|Amlodipine|Ammonium Chloride|Amobarbital|' ||
                          'Amoxicillin|Amphetamine|Amphotericin B|Ampicillin|Antipyrine|Apomorphine|aripiprazole|Articaine|Aspartate|Aspirin|Atazanavir|Atenolol|atomoxetine|' ||
                          'atorvastatin|Atropine|attapulgite|azatadine|Azathioprine|azelastine|Azithromycin|Bacitracin|Baclofen|Barbital|Beclomethasone|benazepril|bendamustine|' ||
@@ -342,8 +341,10 @@ where concept_name ~* ('glyceryl stearate|Aluminum stearate|Amber|Arbutin|BEMOTR
       'dioxybenzone|drometrizole|drometrizole trisiloxane|ensulizole|enzacamene|hexyl salicylate|homosalate|' ||
       'meradimate|neral|octisalate|octocrylene|octyltriethoxysilane|olive oil|oxybenzone|padimate-O|' ||
       'resveratrol|stearate|sulisobenzone|titan')
-and concept_name !~* ('Triclosan|triclocarban|Triamcinolone|Testosterone|pyridoxine|Naproxen|Ipecac|Iodine|Immunoglobulin|Histidine|Histamine|Folic Acid|Escherichia coli|Epinephrine|Cortisone|Corticotropin|zeel|vitamin|tablet|plaster|FNG I|silent nights|' ||
-    'sleep |external analgesic|phenylephrine|detox')
+and concept_name !~* ('Triclosan|triclocarban|Triamcinolone|Testosterone|pyridoxine|Naproxen|Ipecac|Iodine|Immunoglobulin|Histidine|Histamine|Folic Acid|Escherichia coli|Epinephrine|Cortisone|Corticotropin|zeel|' ||
+                      '(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|avobenzone|ensulizole|oxybenzone).*)(vitamin|detox)(?!.*(titan|Octinoxate|octocrylene|homosalate|octisalate|avobenzone|ensulizole|oxybenzone))|' ||
+                      'tablet|plaster|FNG I|silent nights|' ||
+                      'sleep |external analgesic|phenylephrine')
 ;
 
 --Code for DRUGS
@@ -356,8 +357,10 @@ where concept_name ~* ('glyceryl stearate|Aluminum stearate|Amber|Arbutin|BEMOTR
       'dioxybenzone|drometrizole|drometrizole trisiloxane|ensulizole|enzacamene|hexyl salicylate|homosalate|' ||
       'meradimate|neral|octisalate|octocrylene|octyltriethoxysilane|olive oil|oxybenzone|padimate-O|' ||
       'resveratrol|stearate|sulisobenzone|titan')
-and concept_name ~* ('Triclosan|triclocarban|Triamcinolone|Testosterone|pyridoxine|Naproxen|Ipecac|Iodine|Immunoglobulin|Histidine|Histamine|Folic Acid|Escherichia coli|Epinephrine|Cortisone|Corticotropin|zeel|vitamin|tablet|plaster|FNG I|silent nights|' ||
-    'sleep |external analgesic|phenylephrine|detox')
+and concept_name ~* ('Triclosan|triclocarban|Triamcinolone|Testosterone|pyridoxine|Naproxen|Ipecac|Iodine|Immunoglobulin|Histidine|Histamine|Folic Acid|Escherichia coli|Epinephrine|Cortisone|Corticotropin|zeel|' ||
+                      '(?<!(titan|Octinoxate|octocrylene|homosalate|octisalate|avobenzone|ensulizole|oxybenzone).*)(vitamin|detox)(?!.*(titan|Octinoxate|octocrylene|homosalate|octisalate|avobenzone|ensulizole|oxybenzone))|' ||
+                      'tablet|plaster|FNG I|silent nights|' ||
+                      'sleep |external analgesic|phenylephrine')
 ;
 
 DELETE FROM NDC_remains
@@ -976,16 +979,20 @@ WHERE concept_id in (select concept_id from NDC_drugs UNION ALL select concept_i
 INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
-where concept_name ~* 'F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)'
-and concept_name !~* 'INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil'
+where concept_name ~* ('F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)|' ||
+      'Indium|in(?=.*111)|Iod(?=.*125)|I( 125|-125)|Cesium|Tc(?=.*99)|techn|ammonia N(?=.*13)')
+and concept_name !~* ('INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil|' ||
+    'borax|triclosan|allantoin|vagina|zinc|carboplatin|doxor(u|i)b|Cladribine|vanco|dexametha|alumin|primaqui|sulfasalazine|Fludarabine|Desferrioxamine');
 ;
 
 --Code for DRUGS
 INSERT INTO NDC_drugs
 SELECT *
 FROM NDC_remains
-    where concept_name ~* 'F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)'
-and concept_name ~* 'INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil'
+where concept_name ~* ('F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)|' ||
+      'Indium|in(?=.*111)|Iod(?=.*125)|I( 125|-125)|Cesium|Tc(?=.*99)|techn|ammonia N(?=.*13)')
+and concept_name ~* ('INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil|' ||
+    'borax|triclosan|allantoin|vagina|zinc|carboplatin|doxor(u|i)b|Cladribine|vanco|dexametha|alumin|primaqui|sulfasalazine|Fludarabine|Desferrioxamine');
 ;
 
 DELETE FROM NDC_remains
@@ -1009,11 +1016,19 @@ WHERE concept_name ~* 'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocry
 SELECT *
 FROM ndc_drugs
 WHERE concept_name ~* 'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocrylene|homosalate'
-and concept_name !~* 'detox|niacinamide|hp_|vitamin|homeo|pellet|Salicylic Acid|progesterone|hydroquinone|caffeine|IDEBENONE'
+and concept_name !~* 'hp_|homeo|pellet|Salicylic Acid|progesterone|hydroquinone|caffeine|IDEBENONE'
 ;
 
+SELECT *
+FROM ndc_remains
+WHERE concept_name ~* 'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocrylene|homosalate'
+--and concept_name !~* 'niacinamide|hp_|homeo|pellet|Salicylic Acid|progesterone|hydroquinone|caffeine|IDEBENONE'
+;
 
-
+SELECT *
+FROM ndc_non_drugs
+WHERE concept_name ~* 'vitamin'
+;
 
 
 --Example
@@ -1102,7 +1117,6 @@ WHERE concept_name ~* 'titan|Octinoxate|Octisalate|oxybenzone|ensulizole|octocry
 FROM ingredients i
 JOIN drugs d
     ON d.concept_name ilike '%' || i.concept_name || '%'
-
 EXCEPT*/
 
 SELECT DISTINCT i.concept_name
