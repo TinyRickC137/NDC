@@ -980,7 +980,7 @@ INSERT INTO NDC_non_drugs
 SELECT *
 FROM NDC_remains
 where concept_name ~* ('F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)|' ||
-      'Indium|in(?=.*111)|Iod(?=.*125)|I( 125|-125)|Cesium|Tc(?=.*99)|techn|ammonia N(?=.*13)')
+      'Indium|in(?=.*111)|Iod(?=.*125)|I( 125|-125)|Cesium|Tc(?=.*99)|techn|ammonia N(?=.*13)|c-13|NH3')
 and concept_name !~* ('INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil|' ||
     'borax|triclosan|allantoin|vagina|zinc|carboplatin|doxor(u|i)b|Cladribine|vanco|dexametha|alumin|primaqui|sulfasalazine|Fludarabine|Desferrioxamine');
 ;
@@ -990,7 +990,7 @@ INSERT INTO NDC_drugs
 SELECT *
 FROM NDC_remains
 where concept_name ~* ('F(?=.*18)|Chrom(?=.*51)|Xe(?=.*133)|Iod(?=.*123)|I( 123|-123)|rubidium(?=.*82)|Thall(?=.*201)|' ||
-      'Indium|in(?=.*111)|Iod(?=.*125)|I( 125|-125)|Cesium|Tc(?=.*99)|techn|ammonia N(?=.*13)')
+      'Indium|in(?=.*111)|Iod(?=.*125)|I( 125|-125)|Cesium|Tc(?=.*99)|techn|ammonia N(?=.*13)|c-13|NH3')
 and concept_name ~* ('INFLUENZ|cold|multiple|vitamin|cough|Ceftibuten|armodafinil|' ||
     'borax|triclosan|allantoin|vagina|zinc|carboplatin|doxor(u|i)b|Cladribine|vanco|dexametha|alumin|primaqui|sulfasalazine|Fludarabine|Desferrioxamine');
 ;
